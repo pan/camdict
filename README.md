@@ -19,6 +19,8 @@ One test may fail if the gem nokogiri hasn't pulled in the fix [here][2]. But
 it is safe to apply the patch to your nokogiri copy.
 
 ## Usage
+
+```ruby
     require 'camdict'
 
     # Look up a new word
@@ -48,7 +50,7 @@ it is safe to apply the patch to your nokogiri copy.
       # I had to give up drinking for health reasons.
       # He gave up work because of ill health.
     }
-
+```
 
 There are some useful testing examples in test directory of this gem.
 
