@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.authors = ["Pan Gaoyong", "\u{6f58}\u{9ad8}\u{52c7}"]
   s.email = 'pan.gaoyong@gmail.com'
   s.summary = 'online Cambridge dictionary client'
-  s.description = "get definitions, pronunciation and example sentences of" +
+  s.description = "Get definitions, pronunciation and example sentences of" +
     " a word or phrase from the online Cambridge dictionaries." 
   s.files = ["license", "Rakefile", "README.md", "lib/camdict.rb"] + 
     Dir["lib/camdict/*"] + Dir["test/*"]

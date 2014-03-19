@@ -18,6 +18,26 @@ module Camdict
       str = "not give/budge/move an inch"
       expected = ['not give an inch', 'not budge an inch', 'not move an inch']
       assert_equal expected, str.flatten
+      str = "fall into the/sb's trap"
+      expected = ['fall into the trap', 'fall into sb\'s trap']
+      assert_equal expected, str.flatten
+      str = "what is sb/sth?"
+      expected = ['what is sb?', 'what is sth?']
+      assert_equal expected, str.flatten
+      str = "look lively/sharp!"
+      expected = ['look lively!', 'look sharp!']
+      assert_equal expected, str.flatten
+      str = "the like of sb/sth; sb's/sth's like"
+      expected = ['the like of sb', 'the like of sth', 
+        "sb's like", "sth's like"]
+      assert_equal expected, str.flatten
+      str = "go (like/down) a bomb"
+      expected = ['go a bomb', 'go like a bomb', 'go down a bomb']
+      assert_equal expected, str.flatten
+      # need more examples to support complex 'or' separators 
+      #   sound like/as if/as though
+      #   look on/upon sb/sth as sth
+      #   look at/see sth through rose-coloured/tinted glasses
     end
 
     def test_expand
