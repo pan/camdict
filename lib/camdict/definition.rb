@@ -44,7 +44,7 @@ module Camdict
     # tense of this verb.
     attr_reader :verb
 
-    # Input are +word+ and +entry_html+ is 
+    # Input +word+ and +entry_html+ are
     # { entry ID => its html definition source }
     def initialize(word, entry_html)
       @word = word
@@ -366,7 +366,15 @@ module Camdict
             ret = full[0..position-slen+2] + center + full[position+1..flen-1]
             return {baseipa: ret, sindex: findex}
           end
-          raise "unmatched head-tail hyphen IPA"
+          # this is a simple solution to workaround the issue since no common
+          # chars are found between the full and short ipa. Such as the word
+          # 'difference', so just assign full to short
+          begin
+            raise "head-tail hyphen IPA #{short} for the word #{@word}" +
+              "unmatched with #{full}."
+          rescue RuntimeError
+            return full_sp
+          end
         else
           # head hyphen
           right = short[1, slen-1]
@@ -393,22 +401,25 @@ module Camdict
       elsif short[-1] == '-'
         left = short[0, slen-1]
         # match left
+        # set to true when first one or two chars are identical
+        one = two = nil 
         # unicode of secondary stress & stress mark are considered
         if  ["\u{2cc}", "\u{2c8}"].include? left[0]
-          if left[0,2] == full[0,2]
-            ret = left + full[slen-1..flen-1]  
-            findex = mix_spi( ussp, 0, basesp, slen-1..flen-1)
-            return {baseipa: ret, sindex: findex}
-          end
-        elsif left[0] == full[0]
+          two = true if left[0,2] == full[0,2]
+        else
+          one = true if left[0] == full[0]
+        end
+        if one or two
           ret = left + full[slen-1..flen-1]  
           findex = mix_spi( ussp, 0, basesp, slen-1..flen-1)
           return {baseipa: ret, sindex: findex}
         else
-          raise "tail hyphen has uncovered case - code needs update."
+          raise NotImplementedError, 
+            "tail hyphen has uncovered case - code needs update."
         end
       else
-        raise "IPA doesn't begin or end with a hyphen, nothing is done."
+        raise ArgumentError,
+          "IPA doesn't begin or end with a hyphen, nothing is done."
       end
     end
 
