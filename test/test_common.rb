@@ -34,6 +34,10 @@ module Camdict
       str = "go (like/down) a bomb"
       expected = ['go a bomb', 'go like a bomb', 'go down a bomb']
       assert_equal expected, str.flatten
+      str = "the other side/end (of sth)"
+      expected = ['the other side', 'the other end', 'the other side of sth',
+        'the other end of sth']
+      assert_equal expected, str.flatten
       # need more examples to support complex 'or' separators 
       #   sound like/as if/as though
       #   look on/upon sb/sth as sth

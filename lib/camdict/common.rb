@@ -22,11 +22,13 @@ module Camdict
           head, bracket, tail = str.partition(/\(.*\)/)
           unless bracket.empty?
             ret << (head.strip + tail).flatten
-            bracket.delete("()").flatten.each { |s|
+            result = bracket.delete("()").flatten
+            result = [result] if result.is_a? String
+            result.each { |s|
               ret << (head + s + tail).flatten
             }
           end
-          return ret
+          return ret.flatten
         end
         j=0     # count of the alternative words, 'to/at' has two.
         b=[]    # b[]/e[] index of the beginning/end of alternative words
