@@ -400,23 +400,9 @@ module Camdict
       # tail hyphen
       elsif short[-1] == '-'
         left = short[0, slen-1]
-        # match left
-        # set to true when first one or two chars are identical
-        one = two = nil 
-        # unicode of secondary stress & stress mark are considered
-        if  ["\u{2cc}", "\u{2c8}"].include? left[0]
-          two = true if left[0,2] == full[0,2]
-        else
-          one = true if left[0] == full[0]
-        end
-        if one or two
-          ret = left + full[slen-1..flen-1]  
-          findex = mix_spi( ussp, 0, basesp, slen-1..flen-1)
-          return {baseipa: ret, sindex: findex}
-        else
-          raise NotImplementedError, 
-            "tail hyphen has uncovered case - code needs update."
-        end
+        ret = left + full[slen-1..flen-1]  
+        findex = mix_spi( ussp, 0, basesp, slen-1..flen-1)
+        return {baseipa: ret, sindex: findex}
       else
         raise ArgumentError,
           "IPA doesn't begin or end with a hyphen, nothing is done."
