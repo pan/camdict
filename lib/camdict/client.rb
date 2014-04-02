@@ -124,7 +124,7 @@ module Camdict
     def matched_word?(word, node)
       li = node.css(".base")
       resword = li.size == 1 ? li.text : li[0].text
-      if resword.include? '/'
+      if resword.include? '/' or resword.include? ';'
         resword.flatten.include?(word)
       else
         word == resword

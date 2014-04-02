@@ -8,6 +8,8 @@ module Camdict
       # if it doesn't include a slash, returns stripped string
       def flatten
         str = self.strip
+        # remove the space surrounding '/'
+        str = str.gsub /\s*\/\s*/, '/'
         return str unless str.include? '/'
         len = str.length
         ret = []
@@ -39,7 +41,7 @@ module Camdict
           c = str[i] 
           case c
           # valid char in a word
-          when /[[:alpha:]\-']/
+          when /[[:alnum:]\-']/
             if b[j].nil?
               b[j] = i
               e[j] = i
@@ -47,7 +49,7 @@ module Camdict
               e[j] = i
             end
           # char means a word has ended
-          when " ", "!", "?" 
+          when " ", "!", "?", ",", "."
             if include_next
               break
             else

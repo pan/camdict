@@ -38,10 +38,18 @@ module Camdict
       expected = ['the other side', 'the other end', 'the other side of sth',
         'the other end of sth']
       assert_equal expected, str.flatten
+      strs = ["20/20 vision", "public enemy number one/no. 1"]
+      assert_nothing_raised do
+        strs.each { |s| s.flatten }
+      end
+      str = "the more...the more/less"
+      expected = ['the more...the more', 'the more...the less']
+      assert_equal expected, str.flatten
       # need more examples to support complex 'or' separators 
       #   sound like/as if/as though
       #   look on/upon sb/sth as sth
       #   look at/see sth through rose-coloured/tinted glasses
+      #   give /quote sth/sb chapter and verse
     end
 
     def test_expand

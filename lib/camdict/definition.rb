@@ -138,13 +138,13 @@ module Camdict
       location = "idiom" if @is_idiom && @title_word.include?(@word)
       unless @spelling_variant.nil?
         # spelling variant is treated as "title word"
-        location = "spellvar" if @spelling_variant.include? @word
+        location = "spellvar" if @spelling_variant == @word
       end
       unless @head_variant.nil?
         location = "head_variant" if @head_variant.include? @word
       end
-      location ="body_variant" if @body_variant && @body_variant.include?(@word)
-      location = "inflection" if @inflection && @inflection.include?(@word)
+      location ="body_variant" if @body_variant && @body_variant == @word
+      location = "inflection" if @inflection && @inflection == @word
       unless @derived_words.nil?
         if @derived_words.include? @word
           unless location.nil?
@@ -268,6 +268,7 @@ module Camdict
           # US IPA is always followed by a symbol US
           # favorite: UK/US ipa (spellvar US s:favorite) => normal title word
           usnode = @html.css ".di-info img.ussymbol + .pron .ipa"
+          usnode = usnode.first
           usbase = parse_ipa(usnode) unless usnode.nil?
         when 'inflection'
           usnode = @html.css ".info-group img.ussymbol + .pron .ipa"
@@ -302,7 +303,7 @@ module Camdict
             derived_uk = parse_ipa(node.first) unless node.first.nil?
           }
           derived_css("img.ussymbol + .pron .ipa") { |node|
-            usbase = parse_ipa(node) unless node.nil?
+            usbase = parse_ipa(node.first) unless node.first.nil?
           }
           if derived_uk && derived_uk[:baseipa].include?('-')
             ukbase = join_ipa(ukbase, derived_uk)
@@ -400,12 +401,16 @@ module Camdict
       # tail hyphen
       elsif short[-1] == '-'
         left = short[0, slen-1]
-        ret = left + full[slen-1..flen-1]  
+        ret = left + full[slen-1..flen-1]
         findex = mix_spi( ussp, 0, basesp, slen-1..flen-1)
         return {baseipa: ret, sindex: findex}
+      # begin with a primary or secondary stress mark like reunion
+      elsif ["\u{2cc}", "\u{2c8}"].include? short[0]
+        return full_sp # for simple, use uk ipa instead
       else
         raise ArgumentError,
-          "IPA doesn't begin or end with a hyphen, nothing is done."
+          "IPA doesn't begin with a hyphen or stress, nor end with a hyphen. " +
+          "Nothing is done."
       end
     end
 
