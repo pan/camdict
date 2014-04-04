@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name = 'camdict'
   s.version = '1.0.1'
-  s.date = '2014-01-05'
+  s.date = '2014-04-04'
   s.authors = ["Pan Gaoyong", "\u{6f58}\u{9ad8}\u{52c7}"]
   s.email = 'pan.gaoyong@gmail.com'
   s.summary = 'online Cambridge dictionary client'
