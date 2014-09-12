@@ -55,7 +55,7 @@ EoHTM
     end
 
     def test_di_head
-      # Nokogiri version 1.? and later required for this test case
+      # Nokogiri version 1.6.2 and later required for this test case
       # but previous versions should also work with camdict
       # you won't see this test case failure once 
       # https://github.com/sparklemotion/nokogiri/pull/1020 is released.
