@@ -1,8 +1,8 @@
-require 'test/unit'
+require 'minitest/autorun'
 require 'camdict'
 
 module Camdict
-  class ClientiTest < Test::Unit::TestCase
+  class ClientiTest < Minitest::Test
     def test_fetch
       c = Camdict::Client.new
       result = c.send :fetch, "pppppp"

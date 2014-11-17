@@ -1,4 +1,4 @@
-require 'test/unit'
+require 'minitest/autorun'
 require 'camdict'
 
 module Camdict
@@ -10,11 +10,11 @@ module Camdict
 </ul>
 EoHTM
 
-  class ClientTest < Test::Unit::TestCase
+  class ClientTest < MiniTest::Test
 
     def test_new
       c = Camdict::Client.new
-      assert c.instance_eval { @dictionary == "british" }
+      assert c.instance_eval { @dictionary == "english-chinese-simplified" }
       c = Camdict::Client.new("american-english")
       assert c.instance_eval { @dictionary == "american-english" }
     end

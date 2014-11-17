@@ -1,4 +1,4 @@
-require 'test/unit'
+require 'minitest/autorun'
 require 'camdict'
 
 module Camdict
@@ -13,7 +13,7 @@ module Camdict
     '<span class="runon-info"><span class="posgram"><span class="pos">noun' +
     '</span></span></span></span>'
 
-  class DefinitionTest < Test::Unit::TestCase
+  class DefinitionTest < Minitest::Test
 
     def test_pos
       html = '<h2 class="di-title cdo-section-title-hw">favourite</h2>' +
@@ -141,6 +141,14 @@ module Camdict
         :uk_inx   => [10,1],
         :spiexp   => nil 
       }
+      plagiarism = {
+        :uk_utf8  => %w(2c8 70 6c 65 26a 2e 64 292 259 72 2e 61 26a 7a),
+        :us_utf8  => %w(2d 64 292 259 72 2e 26a 2e 7a 259 6d),
+        :expected => %w(2c8 70 6c 65 26a 2e 64 292 259 72 2e 26a 2e 7a 259 6d),
+        :us_inx   => [3,1,9,1],
+        :uk_inx   => [8,1],
+        :spiexp   => [8,1,14,1]
+      }
       # left hyphen
       plagiarize = {
         :uk_utf8  => %w(2c8 70 6c 65 26a 2e 64 292 259 72 2e 61 26a 7a),
@@ -149,14 +157,6 @@ module Camdict
         :us_inx   => nil,
         :uk_inx   => [8,1],
         :spiexp   => nil 
-      }
-      plagiarism = {
-        :uk_utf8  => %w(2c8 70 6c 65 26a 2e 64 292 259 72 2e 61 26a 7a),
-        :us_utf8  => %w(2d 64 292 259 72 2e 26a 2e 7a 259 6d),
-        :expected => %w(2c8 70 6c 65 26a 2e 64 292 259 72 2e 26a 2e 7a 259 6d),
-        :us_inx   => [3,1,9,1],
-        :uk_inx   => [8,1],
-        :spiexp   => [8,1,14,1]
       }
       painting = {
         :uk_utf8  => %w(2c8 70 65 26a 6e 2e 74 26a 14b),

@@ -1,8 +1,8 @@
-require 'test/unit'
+require 'minitest/autorun'
 require 'camdict'
 
 module Camdict
-  class ExplanationTest < Test::Unit::TestCase
+  class ExplanationTest < Minitest::Test
 
     def test_get_level
       html = '<span class="def-info"><span class="epp-xref B1">B1</span>'

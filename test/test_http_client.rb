@@ -1,8 +1,8 @@
-require 'test/unit'
+require 'minitest/autorun'
 require 'camdict'
 
 module Camdict
-  class HTTPClientTest < Test::Unit::TestCase
+  class HTTPClientTest < Minitest::Test
     
     def test_get_html
       require 'webrick'
