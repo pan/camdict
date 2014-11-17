@@ -10,10 +10,11 @@ module Camdict
   # are not included.
   class Client
 
-    # Default dictionary is british. Other possible +dict+ values: 
-    # american-english, business-english, learner-english.
+    # Default dictionary is english-chinese-simplified. 
+    # Other possible +dict+ values: 
+    # british, american-english, business-english, learner-english.
     def initialize(dict=nil)
-      @dictionary = dict || "british"
+      @dictionary = dict || "english-chinese-simplified"
     end
     
 
