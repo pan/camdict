@@ -352,7 +352,24 @@ module Camdict
         if short[-1] == '-'
           center = short[1, slen-2]
           position = full.index(center[0])
-          # match left 
+          # match left and right
+          if full.index(center[-1])
+            left_matched_index  = position
+            right_matched_index = flen-1 - full.index(center[-1])
+            rev_number = center.length - (right_matched_index - 
+                                          left_matched_index + 1)
+            if left_matched_index && rev_number <= 0
+              right_index = mix_spi(basesp, right_matched_index+1..flen-1)
+              rev_right_index = revise_index(right_index, rev_number)
+              findex = mix_spi(basesp, 0..left_matched_index-1,
+                               ussp, left_matched_index+1,
+                               rev_right_index, 0)
+              ret = full[0..left_matched_index-1] + center + 
+                full[right_matched_index+1..flen-1]
+              return {baseipa: ret, sindex: findex}
+            end
+          end
+          # match left only
           if position && (slen - 2 < flen - 1 - position)
             findex = mix_spi(basesp, 0..position-1, ussp, position-1, 
               basesp, position+slen-2..flen-1)
@@ -360,7 +377,7 @@ module Camdict
             return {baseipa: ret, sindex: findex}
           end
           position = full.index(center[-1])
-          # match right
+          # match right only
           if position && (position + 1 > slen - 2)
             findex = mix_spi(basesp, 0..position-slen+2, ussp, position-slen+2,
               basesp, position+1..flen-1)
@@ -412,6 +429,22 @@ module Camdict
           "IPA doesn't begin with a hyphen or stress, nor end with a hyphen. " +
           "Nothing is done."
       end
+    end
+
+    # +superscript_index+ is the superscript index for an IPA
+    # +rev_number+ is the number that is used to revise the superscript index
+    # after the common part of a us shorten ipa is joined with uk ipa, the 
+    # remainding part requires to be revised as it becomes longer or shorter.
+    # return the revised superscript_index or nil if the passed
+    # +superscript_index+ is nil.
+    def revise_index(superscript_index, rev_number)
+      return nil if superscript_index.nil?
+      ret = []
+      superscript_index.each_pair { |position, len|
+        ret += [position+rev_number, len]
+      }
+      return nil if ret.empty?
+      ret
     end
 
     # Determine whether or not the range is included by the superscript index.
