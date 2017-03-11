@@ -1,20 +1,28 @@
+# frozen_string_literal: true
 require 'minitest/autorun'
 require 'camdict'
 
 module Camdict
   class ClientiTest < Minitest::Test
+    def setup
+      @client = Camdict::Client.new
+    end
+
     def test_fetch
-      c = Camdict::Client.new
-      result = c.send :fetch, "pppppp"
-      assert ! result
+      result = @client.send :fetch, 'pppppp'
+      assert !result
+    end
+
+    def test_mentry_links
+      related_html = @client.send :fetch, 'related'
+      related_links = @client.send :mentry_links, 'related', related_html
+      assert_equal 1, related_links.size
     end
 
     def test_html_definition
-      c = Camdict::Client.new
-      search_result = c.html_definition("related")
-      r = search_result.collect {|r| r.keys}
-      assert_equal ["related_1", "related_2"], r.flatten
+      search_result = @client.html_definition('related')
+      key = search_result.first.keys.first
+      assert_equal 'related', key
     end
   end
 end
-
