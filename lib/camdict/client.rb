@@ -63,8 +63,8 @@ module Camdict
       url = search_url + w
       Camdict::HTTP::Client.get_html(url)
     rescue OpenURI::HTTPError => e
-      # "404" == e.message[0..2], When a word is not found, it returns 404
-      # Not Found and spelling suggestions page.
+      # When a word does not match any definitions, it returns 404 not found.
+      return if e.message[0..2] == '404'
     end
 
     # To determine whether or not the input object of Nokogiri::HTML is a page
