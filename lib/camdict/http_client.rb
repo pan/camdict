@@ -13,6 +13,11 @@ module Camdict
       # Download a html page from a remote site, and return a Nokogiri::HTML
       # +url+ will be escaped by this method, and default +agtstr+ is AGENT.
       def self.get_html(url, agtstr = AGENT)
+        new.get_html(url, agtstr)
+      end
+
+      # see +self.get_html+
+      def get_html(url, agtstr = AGENT)
         url = URI.escape(url)
         Nokogiri::HTML(open(url, 'User-Agent' => agtstr))
       end

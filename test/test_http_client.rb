@@ -15,6 +15,11 @@ module Camdict
       http_hello(server)
     end
 
+    def test_self_get_html
+      assert Camdict::HTTP::Client.respond_to? :get_html
+      assert Camdict::HTTP::Client.new.respond_to? :get_html
+    end
+
     def start_hello_thread(server)
       Thread.new do
         res = proc do |_r, q|

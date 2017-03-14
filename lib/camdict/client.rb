@@ -8,7 +8,7 @@ module Camdict
   # when the word "mind" is searched, the exactly matched entry is downloaded.
   # However, other related entries like "turn of mind" & "open mind"
   # are not included.
-  class Client
+  class Client < HTTP::Client
     # Default dictionary is english.
     # Other possible +dict+ values:
     # english-chinese-simplified, learner-english,
@@ -47,7 +47,7 @@ module Camdict
 
     # Get a word html page source by its entry +url+.
     def get_htmldef(url)
-      html = Camdict::HTTP::Client.get_html(url)
+      html = get_html(url)
       di_head_body(html)
     end
 
@@ -61,7 +61,7 @@ module Camdict
       # search a word with this URL
       search_url = "http://dictionary.cambridge.org/search/#{@dictionary}/?q="
       url = search_url + w
-      Camdict::HTTP::Client.get_html(url)
+      get_html(url)
     rescue OpenURI::HTTPError => e
       # When a word does not match any definitions, it returns 404 not found.
       return if e.message[0..2] == '404'
