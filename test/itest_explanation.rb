@@ -11,7 +11,7 @@ module Camdict
       #todo: level info is not in english-chinese-simplied dictionary
       #assert_equal "A2", e1.level
       #assert_equal "B2", defa.last.explanations.first.level
-      assert_equal "I've got thirty exam papers to correct.", 
+      assert_equal %q{"Your name is Angela Black?" "That is correct."},
         defa.last.explanations.first.examples.last.sentence
       w = Camdict::Word.new('correctly')
       defa = w.definitions
