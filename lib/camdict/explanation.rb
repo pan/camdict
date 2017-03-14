@@ -65,7 +65,7 @@ module Camdict
 
     # The meaning of a word for this explanation.
     def get_meaning
-      css_text(".def")
+      css_text('.def')
     end
 
     # Get example sentences. Returned results are Sentence or nil.

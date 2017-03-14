@@ -214,7 +214,7 @@ module Camdict
 
     # Get explanations inside a definition block
     def get_explanations
-      defblocks = @html.css(".sense-body > .def-block")
+      defblocks = @html.css('.def-block')
       exps = defblocks.map { |db| 
         Camdict::Explanation.new(db)
       }
