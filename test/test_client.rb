@@ -15,7 +15,7 @@ EoHTM
       c = Camdict::Client.new
       assert c.instance_eval { @dictionary == 'english' }
       c = Camdict::Client.new('english-chinese-simplified')
-      assert c.instance_eval { @dictionary == 'english-chinese-simplified' }
+      assert_equal 'english-chinese-simplified', c.dictionary
     end
 
     def test_single_def?
@@ -57,10 +57,10 @@ EoHTM
       # you won't see this test case failure once
       # https://github.com/sparklemotion/nokogiri/pull/1020 is released.
       c = Camdict::Client.new
-      htmla = '<div class="di-head">'
-      htmlb = '<h2 class="di-title cdo-section-title-hw">aluminium</h2>' \
-              '<span class="di-info"><span class="pos">noun</span></span>'
-      result = c.send :di_head, Nokogiri::HTML(htmla + htmlb)
+      htmla = '<div data-tab="ds-british">'
+      htmlb = '<h3 class="di-title cdo-section-title-hw">aluminium</h3>'\
+              '<span class="pron-info"><span class="pos">noun</span></span>'
+      result = c.send :di_head, Nokogiri::HTML(htmla + htmlb + '</div>')
       assert_equal(htmlb, result)
     end
   end

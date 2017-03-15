@@ -9,7 +9,8 @@ module Camdict
   # However, other related entries like "turn of mind" & "open mind"
   # are not included.
   class Client < HTTP::Client
-    # Default dictionary is english.
+    attr_reader :dictionary
+    # Default dictionary is British english.
     # Other possible +dict+ values:
     # english-chinese-simplified, learner-english,
     # essential-british-english, essential-american-english, etc.
@@ -94,12 +95,7 @@ module Camdict
       # suppose the word is not found in the dictionary, so it is empty.
       links = []
       nodes = html.css('.prefix-block a')
-      # when found
-      unless nodes.empty?
-        nodes.each do |a|
-          links << a['href'] if matched_word?(word, a)
-        end
-      end
+      nodes.each { |a| links << a['href'] if matched_word?(word, a) }
       links
     end
 
@@ -130,13 +126,26 @@ module Camdict
 
     # Return definition head in html source
     def di_head(html)
-      html.css('.cdo-section-title-hw').to_html(save_with: 0) +
-        html.css('.di-info').to_html(save_with: 0)
+      html.css("#{tab_css} .cdo-section-title-hw").to_html(save_with: 0) +
+        html.css("#{tab_css} .pron-info").to_html(save_with: 0)
     end
 
     # Return definition body in html source
     def di_body(html)
-      html.css('.di-body').to_html(save_with: 0)
+      html.css("#{tab_css} .sense-body").to_html(save_with: 0)
+    end
+
+    # the css selecting a tab
+    def tab_css
+      "[#{tab}]"
+    end
+
+    # the tab attributes according to dictionary name
+    def tab
+      case @dictionary
+      when 'english'
+        'data-tab="ds-british"'
+      end
     end
 
     # get the last part of http://dictionary.cambridge.org/british/related_1
