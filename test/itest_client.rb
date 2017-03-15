@@ -32,17 +32,16 @@ module Camdict
       assert @client.send :matched_word?, 'mind', mind_node
     end
 
-    def test_di_head
+    def test_di_extracted
       html = @client.get_html(@imaginary)
-      r = @client.send :di_head, html
+      r = @client.send :di_extracted, html
       assert_match(/cdo-section-title-hw/, r)
       assert_match(/pron-info/, r)
     end
 
     def test_di_body
       html = @client.get_html(@imaginary)
-      r = @client.send :di_body, html
-      assert_match(/sense-body/, r)
+      assert @client.send :di_body, html
     end
 
     def test_html_definition

@@ -33,7 +33,7 @@ module Camdict
       # some words return their only definition directly, such as aluminium.
       if definition_page? html
         # entry id is just the word when there is only one definition
-        { word => di_head_body(html) }
+        { word => di_extracted(html) }
       else
         # returned page could be a spelling check suggestion page in case it is
         # not found, or the found page with all matched entries and related.
@@ -49,7 +49,7 @@ module Camdict
     # Get a word html page source by its entry +url+.
     def get_htmldef(url)
       html = get_html(url)
-      di_head_body(html)
+      di_extracted(html)
     end
 
     private
@@ -119,20 +119,16 @@ module Camdict
       end
     end
 
-    # Extract definition head and body from Nokogiri::HTML
-    def di_head_body(html)
-      di_head(html) + di_body(html)
-    end
-
-    # Return definition head in html source
-    def di_head(html)
-      html.css("#{tab_css} .cdo-section-title-hw").to_html(save_with: 0) +
-        html.css("#{tab_css} .pron-info").to_html(save_with: 0)
+    # Extract definition head and body from Nokogiri::HTML, discard share links
+    def di_extracted(html)
+      body = di_body(html)
+      body.delete body.css('.share').first
+      body.to_html(save_with: 0)
     end
 
     # Return definition body in html source
     def di_body(html)
-      html.css("#{tab_css} .sense-body").to_html(save_with: 0)
+      html.css("#{tab_css} .di-body")
     end
 
     # the css selecting a tab
