@@ -15,9 +15,6 @@ The gem can be tested by below commands in the directory where it's installed.
 `rake itest`   - run all the testcases that need internet connection.  
 `rake testall` - run all above tests.
 
-One test may fail if the gem nokogiri hasn't pulled in the fix [here][2]. But
-it is safe to apply the patch to your nokogiri copy.
-
 ## Usage
 
 ```ruby
@@ -58,4 +55,3 @@ There are some useful testing examples in test directory of this gem.
 Copyright (c) 2014 Pan Gaoyong
 
 [1]: http://dictionary.cambridge.com "Cambridge"
-[2]: https://github.com/sparklemotion/nokogiri/pull/1020 "My Nokogiri Bug Fix"
