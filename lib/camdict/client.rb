@@ -18,54 +18,83 @@ module Camdict
       @dictionary = dict || 'english'
     end
 
-    # Get a word's html definition(s) by searching it from the web dictionary.
+    # Get a word's html definition(s) from the web dictionary.
     # The returned result could be an empty array when nothing is found, or
     # is an array with a hash element,
     #   [{ word => html definition }],
     # or many hash elements when it has multiple entries(all combined probably,
     # so this case does not exist anymore)
     #   [{ entry_id => html definition }, ...].
-    # Normally, when a +word+ has more than one meanings, its entry ID format is
-    # like word_nn. Otherwise it's just the word itself.
+    # todo: remove entry_id
     def html_definition(word)
       html = fetch(word)
-      return [] if html.nil?
-      # some words return their only definition directly, such as aluminium.
-      if definition_page? html
+      if html
         # entry id is just the word when there is only one definition
-        { word => di_extracted(html) }
+        [{ word => di_extracted(html) }]
       else
-        # returned page could be a spelling check suggestion page in case it is
-        # not found, or the found page with all matched entries and related.
-        # when entry urls are not found, they are empty and spelling suggestion
-        # pages. So mentry_links() returns an empty array. Otherwise, it returns
-        # all the exactly matched entry links.
-        mentry_links(word, html).map do |url|
-          { entry_id(url) => get_htmldef(url) }
-        end
+        search(word)
       end
     end
 
     # Get a word html page source by its entry +url+.
     def get_htmldef(url)
-      html = get_html(url)
-      di_extracted(html)
+      di_extracted get_html(url)
+    end
+
+    # search a word with this URL
+    def search_url(word)
+      "#{host}/search/#{@dictionary}/?q=#{word}"
+    end
+
+    def word_url(word)
+      "#{host}/dictionary/#{@dictionary}/#{word}"
     end
 
     private
+
+    def search(word)
+      html = try_search(word)
+      return [] unless html
+      # some words return their only definition directly, such as plagiarism.
+      if single_def?(html)
+        [{ word => di_extracted(html) }]
+      else
+        multiple_entries(word, html)
+      end
+    end
+
+    def host
+      'http://dictionary.cambridge.org'
+    end
+
+    # returned page could be a spelling check suggestion page in case it is
+    # not found, or the found page with all matched entries and related.
+    # when entry urls are not found, they are empty and spelling suggestion
+    # pages. So mentry_links() returns an empty array. Otherwise, it returns
+    # all the exactly matched entry links.
+    def multiple_entries(word, html)
+      html_defs = []
+      mentry_links(word, html).each do |url|
+        html_content = get_htmldef(url)
+        html_defs << { entry_id(url) => html_content } if html_content
+      end
+      html_defs
+    end
+
+    def try_search(word)
+      get_html(search_url(word))
+    rescue OpenURI::HTTPError => e
+      # When a word does not match any definitions, it returns 404 not found.
+      return if e.message[0..2] == '404'
+    end
 
     # Fetch word searching result page.
     # Returned result is either just a single definition page if there is only
     # one entry, or a result page listing all possible entries, or spelling
     # check result. All results are objects of Nokogiri::HTML.
     def fetch(w)
-      # search a word with this URL
-      search_url = "http://dictionary.cambridge.org/search/#{@dictionary}/?q="
-      url = search_url + w
-      get_html(url)
-    rescue OpenURI::HTTPError => e
-      # When a word does not match any definitions, it returns 404 not found.
-      return if e.message[0..2] == '404'
+      ret = get_html(word_url(w))
+      ret if definition_page? ret
     end
 
     # To determine whether or not the input object of Nokogiri::HTML is a page
@@ -122,6 +151,9 @@ module Camdict
     # Extract definition head and body from Nokogiri::HTML, discard share links
     def di_extracted(html)
       body = di_body(html)
+      # searching aluminium returns an American or British english page
+      # saparately, below condition filter out American english result
+      return if body.empty?
       body.delete body.css('.share').first
       body.to_html(save_with: 0)
     end

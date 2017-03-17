@@ -6,12 +6,12 @@ module Camdict
   class ClientiTest < Minitest::Test
     def setup
       @client = Camdict::Client.new
-      @imaginary = 'http://dictionary.cambridge.org/dictionary/english/imaginary'
+      @imaginary = @client.word_url('imaginary')
     end
 
     def test_fetch
-      result = @client.send :fetch, 'pppppp'
-      assert !result
+      assert !@client.send(:fetch, 'pppppp')
+      assert @client.send(:fetch, 'mind')
     end
 
     def test_single_def?
@@ -20,15 +20,14 @@ module Camdict
     end
 
     def test_mentry_links
-      related_html = @client.send :fetch, 'related'
+      related_html = @client.get_html(@client.search_url('related'))
       related_links = @client.send :mentry_links, 'related', related_html
       assert_equal 1, related_links.size
     end
 
     def test_matched_word?
-      mind = "http://dictionary.cambridge.org/search/#{@client.dictionary}/"\
-        '?q=mind'
-      mind_node = @client.get_html(mind).css('.prefix-item').first
+      mind_url = @client.search_url('mind')
+      mind_node = @client.get_html(mind_url).css('.prefix-item').first
       assert @client.send :matched_word?, 'mind', mind_node
     end
 
