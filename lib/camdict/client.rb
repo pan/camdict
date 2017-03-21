@@ -36,7 +36,7 @@ module Camdict
       end
     end
 
-    # Get a word html page source by its entry +url+.
+    # Get a word html definition page by its entry +url+.
     def get_htmldef(url)
       di_extracted get_html(url)
     end
@@ -154,8 +154,8 @@ module Camdict
       # searching aluminium returns an American or British english page
       # saparately, below condition filter out American english result
       return if body.empty?
-      body.delete body.css('.share').first
-      body.to_html(save_with: 0)
+      body.css('.share').each { |s| body.delete s }
+      body
     end
 
     # Return definition body in html source

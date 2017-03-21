@@ -34,8 +34,8 @@ module Camdict
     def test_di_extracted
       html = @client.get_html(@imaginary)
       r = @client.send :di_extracted, html
-      assert_match(/cdo-section-title-hw/, r)
-      assert_match(/pron-info/, r)
+      assert r.css('.cdo-section-title-hw')
+      assert r.css('.pron-info')
     end
 
     def test_di_body
