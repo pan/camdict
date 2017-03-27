@@ -1,12 +1,13 @@
+# frozen_string_literal: true
 require 'camdict/common'
+require 'camdict/sentence'
 
 module Camdict
   # Explanation are inside the def-block node.
   class Explanation
-
-    # Elementary level. It's a symbol indicating the level when learnders know
+    # Elementary level. It's a symbol indicating the level when learners know
     # this meaning.
-    #   A1: Beginner,       A2: Elementary, 
+    #   A1: Beginner,       A2: Elementary,
     #   B1: Intermediate,   B2: Upper-Intermediate,
     #   C1: Advanced,       C2: Proficiency
     attr_reader :level
@@ -38,91 +39,53 @@ module Camdict
     # Parse +html+ to get level, meaning, example sentences, synonym, opposite,
     # usage, grammar code, region, variant.
     def initialize(html)
-      @html = html
-      @level = get_level                      # String
-      @variant = get_variant                  # String
-      @meaning = get_meaning                  # String
-      @gc = css_text(".gcs")                  # String
-      @usage = css_text(".usage")             # String
-      @region = css_text(".region")           # String
-      @examples = get_examples                # [Sentence]
-      @synonym = get_synonym                  # String
-      @opposite = get_opposite                # String
+      @level = get_level(html)                      # String
+      @variant = get_variant(html)                  # String
+      @meaning = get_meaning(html)                  # String
+      @gc = css_text(html, '.gcs')                  # String
+      @usage = css_text(html, '.usage')             # String
+      @region = css_text(html, '.region')           # String
+      @examples = get_examples(html)                # [Sentence]
+      @synonym = get_synonym(html)                  # String
+      @opposite = get_opposite(html)                # String
       # todo: add usage panel - the word: somewhere.
     end
 
     private
+
     # A meaning may have a symbol representing the difficulty from A1-C2.
-    def get_level
-      css_text ".def-info .epp-xref"
+    def get_level(html)
+      css_text html, '.def-info .epp-xref'
     end
 
     # For an explanation, it may have a variant form word or phrase which has
     # same meaning.
-    def get_variant
-      css_text ".v[title='Variant form']"
+    def get_variant(html)
+      css_text html, ".v[title='Variant form']"
     end
 
     # The meaning of a word for this explanation.
-    def get_meaning
-      css_text('.def')
+    def get_meaning(html)
+      css_text(html, '.def')
     end
 
     # Get example sentences. Returned results are Sentence or nil.
-    def get_examples
-      nodes = @html.css(".examp")
-      unless nodes.empty?
-        @examples = nodes.map { |node| 
-          Camdict::Explanation::Sentence.new(node)
-        }
-      end
+    def get_examples(html)
+      nodes = html.css('.examp')
+      return if nodes.empty?
+      @examples = nodes.map { |node| Camdict::Sentence.new(node) }
     end
 
     # Parse and get synonym word
-    def get_synonym
-      css_text ".entry-xref[type='Synonym'] .x-h"
+    def get_synonym(html)
+      css_text html, ".entry-xref[type='Synonym'] .x-h"
     end
 
     # Parse and get opposite word
-    def get_opposite
-      css_text ".entry-xref[type='Opposite'] .x-h"
+    def get_opposite(html)
+      css_text html, ".entry-xref[type='Opposite'] .x-h"
     end
 
     include Camdict::Common
-
-    # Parse the html to get the example sentence and its typical usage
-    # information associated with this sentence.
-    class Sentence
-      # Get the grammar code or usage in this sentence.
-      # It means how the word is used in this sentence. 
-      # For example, a grammar code for the word - 
-      # 'somewhere' is "+to infinitive". I'm looking for somewhere to eat.
-      attr_reader :usage
-
-      # Get one sentence inside an example block.
-      attr_reader :sentence
-
-      # New a sentence object from +html+ containing the eg block.
-      def initialize(html)
-        @html = html
-        @usage = get_usage
-        @sentence = get_sentence
-      end
-
-      private 
-      # Parse html node under block gcs or usage to get its grammar code or 
-      # usage info for this sentence.
-      def get_usage
-        css_text(".gcs") || css_text(".usage")
-      end
-
-      # Get sentence inside example block(.eg).
-      def get_sentence
-        css_text(".eg")
-      end
-
-      include Camdict::Common
-    end
-
   end
 end
