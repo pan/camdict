@@ -26,13 +26,13 @@ module Camdict
     # so this case does not exist anymore)
     #   [{ entry_id => html definition }, ...].
     # todo: remove entry_id
-    def html_definition(word)
+    def html_definition(word, entry = true)
       html = fetch(word)
       if html
         # entry id is just the word when there is only one definition
-        [{ word => di_extracted(html) }]
+        entry ? [{ word => di_extracted(html) }] : di_extracted(html)
       else
-        search(word)
+        search(word, entry)
       end
     end
 
@@ -52,12 +52,12 @@ module Camdict
 
     private
 
-    def search(word)
+    def search(word, entry)
       html = try_search(word)
       return [] unless html
       # some words return their only definition directly, such as plagiarism.
       if single_def?(html)
-        [{ word => di_extracted(html) }]
+        entry ? [{ word => di_extracted(html) }] : di_extracted(html)
       else
         multiple_entries(word, html)
       end
