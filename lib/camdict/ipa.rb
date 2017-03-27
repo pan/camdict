@@ -23,7 +23,7 @@ module Camdict
     end
 
     def ipa_idx(html, region)
-      parse_ipa html.css(ipa_selector(region))
+      parse_ipa html.css(ipa_selector(region)).first
     end
 
     def derived_ipa_idx(html, region)

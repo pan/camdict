@@ -34,17 +34,17 @@ module Camdict
 
     def ipa_test(d)
       defi = definition(d)
-      uk = ipa_hexs(defi, :uk)
-      us = ipa_hexs(defi, :us)
-      actual = [uk, us, defo.ipa.k, defo.ipa.s]
+      uk = ipa_hexes(defi, :uk)
+      us = ipa_hexes(defi, :us)
+      actual = [uk, us, defi.ipa.k, defi.ipa.s]
       ipa_assert(d, actual)
     end
 
     def definition(d)
-      Camdict::Word.new(d[:word]).definitions.first
+      Camdict::Word.new(d[:word]).definition
     end
 
-    def ipa_hexs(defi, region)
+    def ipa_hexes(defi, region)
       defi.ipa.send(region).unpack('U*').map { |n| n.to_s 16 }
     end
 
