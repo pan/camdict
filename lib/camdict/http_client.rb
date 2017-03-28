@@ -1,12 +1,12 @@
 # frozen_string_literal: true
+require 'open-uri'
+
 module Camdict
   # HTTP module
   module HTTP
-    require 'open-uri'
-
     # A default user agent string for this http client. It can be customised.
     AGENT =
-      'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:26.0) Gecko/20100101 Firefox/26.0'
+      'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52'
 
     # HTTP Client class
     class Client
@@ -18,7 +18,7 @@ module Camdict
 
       # see +self.get_html+
       def get_html(url, agtstr = AGENT)
-        url = URI.escape(url)
+        url = URI(url)
         Nokogiri::HTML(open(url, 'User-Agent' => agtstr))
       end
     end
