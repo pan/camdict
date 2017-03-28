@@ -5,6 +5,8 @@ module Camdict
   # definition entry, an entry contains all definitions for a part of speech.
   # parsing the entry to get meanings, example sentences
   module Entry
+    private
+
     Sense = Struct.new(:part_of_speech, :category, :explanations)
 
     def get_senses(html)

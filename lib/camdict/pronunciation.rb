@@ -2,14 +2,16 @@
 module Camdict
   # pronunciation related methods shall be included in Camdict::Definition
   module Pronunciation
+    # Get the pronunciation
+    attr_reader :pronunciation
+
+    private
+
     # Struct Pronunciation has two members.
     # Each +uk+/+us+ has its own mp3/ogg links.
     Pronunciation = Struct.new(:uk, :us)
     # Struct Link has two members +mp3+ and +ogg+, which are the http links.
     Link = Struct.new(:mp3, :ogg)
-
-    # Get the pronunciation
-    attr_reader :pronunciation
 
     # Get the UK/US pronunciation mp3/ogg links as Struct uk:Link, us:Link
     def get_pronunciation(html)

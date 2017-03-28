@@ -5,6 +5,8 @@ module Camdict
     # Get the IPA
     attr_reader :ipa
 
+    private
+
     # Struct IPA is Internaltional Phonetic Alphabet
     # +uk+: UK IPA;   +k+: the superscript index in the UK IPA.
     # +us+: US IPA;   +s+: the superscript index in the US IPA.
@@ -32,9 +34,6 @@ module Camdict
 
     def ipa_selector(region)
       %([pron-region="#{region}"] .ipa)
-    end
-
-    def derived_ipa_selector(region)
     end
 
     # Parse an ipa node to get the ipa string and its superscript index
