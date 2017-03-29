@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'camdict/http_client'
+require 'camdict/string_ext'
 
 module Camdict
   # The client downloads all the useful data about a word or phrase from
@@ -128,26 +129,6 @@ module Camdict
       links
     end
 
-    # Return true if the searched word matches the one on result page.
-    # Node is an object of Nokogiri::Node
-    # <li>
-    #   <span class="base">
-    #     <b class="phrase">out of mind, or
-    #     <b class="hw">turn of mind, or
-    #     <b class="w">mind-numbingly
-    # Match criterion: the queried word should equal to the result word;
-    #   the result phrase should be flattened, which should equal to the
-    #   queried phrase.
-    def matched_word?(word, node)
-      li = node.css('.base')
-      resword = li.size == 1 ? li.text : li[0].text
-      if resword.include?('/') || resword.include?(';')
-        resword.flatten.include?(word)
-      else
-        word == resword
-      end
-    end
-
     # Extract definition head and body from Nokogiri::HTML, discard share links
     def di_extracted(html)
       body = di_body(html)
@@ -182,5 +163,26 @@ module Camdict
     end
 
     alias definition_page? single_def?
+
+    using Camdict::StringExt
+    # Return true if the searched word matches the one on result page.
+    # Node is an object of Nokogiri::Node
+    # <li>
+    #   <span class="base">
+    #     <b class="phrase">out of mind, or
+    #     <b class="hw">turn of mind, or
+    #     <b class="w">mind-numbingly
+    # Match criterion: the queried word should equal to the result word;
+    #   the result phrase should be flattened, which should equal to the
+    #   queried phrase.
+    def matched_word?(word, node)
+      li = node.css('.base')
+      resword = li.size == 1 ? li.text : li[0].text
+      if resword.include?('/') || resword.include?(';')
+        resword.flatten.include?(word)
+      else
+        word == resword
+      end
+    end
   end
 end
