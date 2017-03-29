@@ -1,6 +1,4 @@
 # frozen_string_literal: true
-require 'camdict/string_flatten'
-
 module Camdict
   # Extention: Refine String class.
   module StringExt
