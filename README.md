@@ -1,5 +1,6 @@
 # A ruby gem - camdict
 ![Build Status](https://travis-ci.org/pan/camdict.svg?branch=master)
+![Code Climate](https://codeclimate.com/github/pan/camdict/badges/gpa.svg)
 
 ## Introduction
 
