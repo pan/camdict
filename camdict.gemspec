@@ -13,5 +13,5 @@ Gem::Specification.new do |s|
   s.homepage = 'https://github.com/pan/camdict'
   s.license = 'MIT'
   s.add_runtime_dependency "nokogiri", '>= 1.6.2'
-  s.required_ruby_version = '>= 1.9.3' # also required by nokogiri 
+  s.required_ruby_version = '>= 2.3.0'
 end

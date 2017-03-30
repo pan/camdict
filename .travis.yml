@@ -3,6 +3,6 @@ rvm:
   - 2.3.0
   - 2.3.3
   - 2.4.1
-  - jruby-9.1.8.0
   - rbx-3.72
+dist: trusty
 script: rake testall
