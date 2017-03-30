@@ -1,6 +1,5 @@
 # A ruby gem - camdict
-[![Build Status](https://travis-ci.org/pan/camdict.svg?branch=master)]
-(https://travis-ci.org/pan/camdict)
+![Build Status](https://travis-ci.org/pan/camdict.svg?branch=master)
 
 ## Introduction
 
