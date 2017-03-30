@@ -76,7 +76,7 @@ module Camdict
       end
 
       def f_word_not_start_end(str, b, e, i, j)
-        str[0..b[0] - 1] + str[b[i]..e[i]] + str[e[j] + 1..str.length - 1]
+        f_word_at_end(str, b, e, i) + str[e[j] + 1..str.length - 1]
       end
 
       def f_word_at_end(str, b, e, i)
