@@ -1,9 +1,8 @@
 language: ruby
 rvm:
-  - 2.2.7
   - 2.3.0
   - 2.3.3
   - 2.4.1
-  - jruby
-  - rbx-3
+  - jruby-9.1.8.0
+  - rbx-3.72
 script: rake testall
