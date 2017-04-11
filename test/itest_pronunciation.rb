@@ -30,7 +30,7 @@ module Camdict
     private
 
     def get_pron(word)
-      defs = Camdict::Client.new.html_definition(word).first[word]
+      defs = Camdict::Client.new.html_definition(word)
       d = Camdict::Definition.new(word)
       d.send :get_pronunciation, defs
     end

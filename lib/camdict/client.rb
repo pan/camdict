@@ -19,21 +19,16 @@ module Camdict
       @dictionary = dict || 'english'
     end
 
-    # Get a word's html definition(s) from the web dictionary.
+    # Get a word's html definition from the web dictionary.
     # The returned result could be an empty array when nothing is found, or
-    # is an array with a hash element,
-    #   [{ word => html definition }],
-    # or many hash elements when it has multiple entries(all combined probably,
-    # so this case does not exist anymore)
-    #   [{ entry_id => html definition }, ...].
-    # todo: remove entry_id
-    def html_definition(word, entry = true)
+    # its html definition
+    def html_definition(word)
       html = fetch(word)
       if html
         # entry id is just the word when there is only one definition
-        entry ? [{ word => di_extracted(html) }] : di_extracted(html)
+        di_extracted(html)
       else
-        search(word, entry)
+        search(word)
       end
     end
 
@@ -53,14 +48,14 @@ module Camdict
 
     private
 
-    def search(word, entry)
+    def search(word)
       html = try_search(word)
       return [] unless html
       # some words return their only definition directly, such as plagiarism.
       if single_def?(html)
-        entry ? [{ word => di_extracted(html) }] : di_extracted(html)
+        di_extracted(html)
       else
-        multiple_entries(word, html)
+        multiple_entries(word, html).join
       end
     end
 
@@ -77,7 +72,7 @@ module Camdict
       html_defs = []
       mentry_links(word, html).each do |url|
         html_content = get_htmldef(url)
-        html_defs << { entry_id(url) => html_content } if html_content
+        html_defs << html_content if html_content
       end
       html_defs
     end

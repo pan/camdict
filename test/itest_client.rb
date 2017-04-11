@@ -45,8 +45,7 @@ module Camdict
 
     def test_html_definition
       search_result = @client.html_definition('related')
-      key = search_result.first.keys.first
-      assert_equal 'related', key
+      assert search_result.first
     end
   end
 end

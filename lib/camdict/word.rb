@@ -64,9 +64,7 @@ module Camdict
     end
 
     def raw_definitions
-      @raw_definitions ||= retrieve.map do |r|
-        r.values.first.to_html(save_with: 0)
-      end
+      @raw_definitions ||= retrieve.map { |r| r.to_html(save_with: 0) }
     end
 
     alias pos part_of_speech
@@ -78,10 +76,7 @@ module Camdict
     end
 
     def g_definitions
-      retrieve.map do |r|
-        hdef = r.values.first
-        Camdict::Definition.new(@word).parse(hdef)
-      end
+      retrieve.map { |hdef| Camdict::Definition.new(@word).parse(hdef) }
     end
 
     def meanings_json

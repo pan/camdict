@@ -4,7 +4,7 @@ require_relative 'helper'
 module Camdict
   class EntryiTest < Minitest::Test
     def setup
-      fly_e = Camdict::Client.new.html_definition('fly', false)
+      fly_e = Camdict::Client.new.html_definition('fly')
                              .css('.entry-body__el').first
       @senses = Camdict::Definition.new('fly').send(:get_senses, fly_e)
     end
@@ -28,7 +28,7 @@ module Camdict
     end
 
     def test_derived_pos
-      html = Camdict::Client.new.html_definition('plagiarism', false)
+      html = Camdict::Client.new.html_definition('plagiarism')
                             .css('.entry-body__el')
       senses = Camdict::Definition.new('plagiarism').send(:get_senses, html)
       assert_equal 'noun', senses.first.part_of_speech

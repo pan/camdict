@@ -10,8 +10,6 @@ module Camdict
     # Get senses for this definition.
     attr_reader :senses
 
-    # Input +word+ and +entry_html+ are
-    # { entry ID => its html definition source }
     def initialize(word)
       @word = word
     end
