@@ -63,8 +63,8 @@ module Camdict
       @definitions ||= g_definitions
     end
 
-    def raw_definitions
-      @raw_definitions ||= retrieve.map { |r| r.to_html(save_with: 0) }
+    def raw_definition
+      @raw_definition ||= retrieve.to_html(save_with: 0)
     end
 
     alias pos part_of_speech

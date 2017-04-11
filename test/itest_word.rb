@@ -11,8 +11,8 @@ module Camdict
       assert @film.definitions.size.positive?
     end
 
-    def test_raw_definitions
-      assert @film.raw_definitions.size.positive?
+    def test_raw_definition
+      refute @film.raw_definition.empty?
     end
 
     def test_ipa
