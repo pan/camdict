@@ -21,12 +21,12 @@ module Camdict
       assert_equal expected, exp.meaning
     end
 
-    def test_gc
+    def test_code
       # rubber has region, usage, gc
       html = '<span class="def-info"><span class="gcs">U</span>'
       html = Nokogiri::HTML(html)
       exp  = Camdict::Explanation.new(html)
-      assert_equal 'U', exp.gc
+      assert_equal 'U', exp.code
     end
 
     def test_get_sentence

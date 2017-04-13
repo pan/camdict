@@ -34,7 +34,7 @@ module Camdict
     attr_reader :variant
 
     # Grammar code. Full list is http://dictionary.cambridge.org/help/codes.html
-    attr_reader :gc
+    attr_reader :code
 
     # Parse +html+ to get level, meaning, example sentences, synonym, opposite,
     # usage, grammar code, region, variant.
@@ -42,7 +42,7 @@ module Camdict
       @level = get_level(html)                      # String
       @variant = get_variant(html)                  # String
       @meaning = get_meaning(html)                  # String
-      @gc = css_text(html, '.gcs')                  # String
+      @code = css_text(html, '.gcs')                # String
       @usage = css_text(html, '.usage')             # String
       @region = css_text(html, '.region')           # String
       @examples = get_examples(html)                # [Sentence]

@@ -14,16 +14,16 @@ module Camdict
                    e.examples.last.sentence
     end
 
-    def test_gc
+    def test_code
       w = Camdict::Word.new('cause')
-      def1 = w.definitions.first
+      def1 = w.definitions
       e1 = def1.senses.first.explanations.first
-      assert_equal ' C or U ', e1.gc
+      assert_equal ' C or U ', e1.code
     end
 
     def test_gc_usage
       w = Camdict::Word.new('cause')
-      def1 = w.definitions.first
+      def1 = w.definition
       e2 = def1.senses[2].explanations.first
       assert_equal ' + two objects ', e2.examples.last.usage
     end
