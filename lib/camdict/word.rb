@@ -36,8 +36,9 @@ module Camdict
     end
 
     # show all important dictionary information, returns
-    # { meaning: [{ pos: '', category: '', level: '', code: '',
-    #             sense: [{ meaning:, eg: [] }] }]
+    # { meaning: [{ pos: '', category: '',
+    #             sense: [{ meaning:, eg: [], level: '', code: '', synonym: '',
+    #                      opposite: '', usage: '', region: ''}] }]
     #   ipa: '' | { uk: , us: },
     #   pronunciation: { uk: mp3|ogg, us: mp3|ogg }
     # }
@@ -54,10 +55,6 @@ module Camdict
       pp show
     end
 
-    def definition
-      definitions.first
-    end
-
     # Get all definitions for this word from remote online dictionary
     def definitions
       @definitions ||= g_definitions
@@ -68,6 +65,7 @@ module Camdict
     end
 
     alias pos part_of_speech
+    alias definition definitions
 
     private
 
@@ -76,7 +74,7 @@ module Camdict
     end
 
     def g_definitions
-      retrieve.map { |hdef| Camdict::Definition.new(@word).parse(hdef) }
+      Camdict::Definition.new(@word).parse(retrieve)
     end
 
     def meanings_json
@@ -85,6 +83,7 @@ module Camdict
           pos: s.part_of_speech, category: s.category,
           sense: s.explanations.map do |e|
             { meaning: e.meaning, eg: e.examples&.map(&:sentence) }
+              .merge(optional_meaning_items(e))
           end
         }
       end
@@ -92,6 +91,12 @@ module Camdict
 
     def ipa_json
       ipa(:uk) == ipa(:us) ? ipa : { uk: ipa(:uk), us: ipa(:us) }
+    end
+
+    def optional_meaning_items(exp)
+      %w(level code synonym opposite usage region).inject({}) do |ret, o|
+        exp.public_send(o) ? ret.merge({ o => exp.public_send(o) }) : ret
+      end
     end
   end
 end

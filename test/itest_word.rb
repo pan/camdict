@@ -8,7 +8,7 @@ module Camdict
     end
 
     def test_definitions
-      assert @film.definitions.size.positive?
+      assert @film.definitions
     end
 
     def test_raw_definition
