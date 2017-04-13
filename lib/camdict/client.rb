@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require 'camdict/http_client'
 require 'camdict/string_ext'
+require 'camdict/exception'
 
 module Camdict
   # The client downloads all the useful data about a word or phrase from
@@ -20,12 +21,11 @@ module Camdict
     end
 
     # Get a word's html definition from the web dictionary.
-    # The returned result could be an empty array when nothing is found, or
+    # The returned result could be an empty string when nothing is found, or
     # its html definition
     def html_definition(word)
       html = fetch(word)
       if html
-        # entry id is just the word when there is only one definition
         di_extracted(html)
       else
         search(word)
@@ -50,7 +50,7 @@ module Camdict
 
     def search(word)
       html = try_search(word)
-      return [] unless html
+      return '' unless html
       # some words return their only definition directly, such as plagiarism.
       if single_def?(html)
         di_extracted(html)
@@ -66,14 +66,15 @@ module Camdict
     # returned page could be a spelling check suggestion page in case it is
     # not found, or the found page with all matched entries and related.
     # when entry urls are not found, they are empty and spelling suggestion
-    # pages. So mentry_links() returns an empty array. Otherwise, it returns
-    # all the exactly matched entry links.
+    # pages. It returns all the exactly matched entry links otherwise, raise
+    # exception WordNotFound.
     def multiple_entries(word, html)
       html_defs = []
       mentry_links(word, html).each do |url|
         html_content = get_htmldef(url)
         html_defs << html_content if html_content
       end
+      raise WordNotFound, "#{word} not found" if html_defs.empty?
       html_defs
     end
 
@@ -172,6 +173,7 @@ module Camdict
     #   queried phrase.
     def matched_word?(word, node)
       li = node.css('.base')
+      return false if li.empty?
       resword = li.size == 1 ? li.text : li[0].text
       if resword.include?('/') || resword.include?(';')
         resword.flatten.include?(word)
