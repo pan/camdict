@@ -56,5 +56,10 @@ EoHTM
         '</div></div>'
       assert @client.send :di_body, Nokogiri::HTML(html)
     end
+
+    def test_encode
+      assert_equal 'time-zone', @client.send(:encode, 'time zone')
+      assert_equal 'time-s-up', @client.send(:encode, "time's up")
+    end
   end
 end

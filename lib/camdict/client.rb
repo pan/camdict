@@ -43,7 +43,7 @@ module Camdict
     end
 
     def word_url(word)
-      "#{host}/dictionary/#{@dictionary}/#{word}"
+      "#{host}/dictionary/#{@dictionary}/#{encode(word)}"
     end
 
     private
@@ -156,6 +156,11 @@ module Camdict
     # get the last part of http://dictionary.cambridge.org/british/related_1
     def entry_id(url)
       url.split('/').last
+    end
+
+    # phrase with space and single quote has to be replaced with dash
+    def encode(word)
+      word.gsub(/[ ']/, '-')
     end
 
     alias definition_page? single_def?
