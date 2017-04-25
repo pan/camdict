@@ -1,6 +1,6 @@
 # A ruby gem - camdict
-![Build Status][travis-image][travis-link]
-![Code Climate][climate-image][climate-link]
+[![Build Status][travis-image]][travis-link]
+[![Code Climate][climate-image]][climate-link]
 
 ## Introduction
 
