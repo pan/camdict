@@ -1,6 +1,6 @@
 # A ruby gem - camdict
-![Build Status](https://travis-ci.org/pan/camdict.svg?branch=master)
-![Code Climate](https://codeclimate.com/github/pan/camdict/badges/gpa.svg)
+![Build Status][travis-image][travis-link]
+![Code Climate][climate-image][climate-link]
 
 ## Introduction
 
@@ -43,10 +43,14 @@ The gem can be tested by below commands in the directory where it's installed.
 Need more? try `health.print` to show more data in a friendly format.
 
 ## Versioning
-The release of this gem follows the [semantic versioning rule][2].
+The release of this gem follows the [semantic versioning rules][2].
 
 ## Licence MIT
 Copyright (c) 2014-2017 Pan Gaoyong
 
 [1]: http://dictionary.cambridge.com "Cambridge"
 [2]: http://semver.org
+[travis-image]: https://travis-ci.org/pan/camdict.svg?branch=master
+[travis-link]: https://travis-ci.org/pan/camdict
+[climate-image]: https://codeclimate.com/github/pan/camdict/badges/gpa.svg
+[climate-link]: https://codeclimate.com/github/pan/camdict
