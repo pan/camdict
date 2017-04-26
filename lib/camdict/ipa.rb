@@ -40,13 +40,13 @@ module Camdict
     def parse_ipa(node)
       position = 0
       pindex = []
-      node.children.each do |c|
+      node&.children&.each do |c|
         len = c.text.length
         pindex += [position, len] if c['class'] == 'sp'
         position += len
       end
       pindex = nil if pindex.empty?
-      [node.text, pindex]
+      [node&.text, pindex]
     end
   end
 end

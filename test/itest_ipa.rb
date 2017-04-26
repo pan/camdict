@@ -22,6 +22,10 @@ module Camdict
       ipa_test(sled)
     end
 
+    def test_no_us_ipa
+      ipa_test(match)
+    end
+
     private
 
     def ipa_assert(e, a)
@@ -45,7 +49,17 @@ module Camdict
     end
 
     def ipa_hexes(defi, region)
-      defi.ipa.send(region).unpack('U*').map { |n| n.to_s 16 }
+      defi.ipa.send(region)&.unpack('U*')&.map { |n| n.to_s 16 }
+    end
+
+    def match
+      {
+        word: 'match',
+        uk_utf8: %w(6d e6 74 283),
+        us_utf8: nil,
+        uk_inx: nil,
+        us_inx: nil
+      }
     end
 
     def imaginary
