@@ -43,7 +43,7 @@ module Camdict
     end
 
     def word_url(word)
-      "#{host}/dictionary/#{@dictionary}/#{encode(word)}"
+      "#{host}/dictionary/#{@dictionary}/#{encode(word).downcase}"
     end
 
     private
